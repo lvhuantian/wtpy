@@ -1,0 +1,23 @@
+# A股趋势选股策略回测配置
+# 复制自wtpy标准回测配置
+
+# 环境配置
+env:
+  mocker: sel
+
+# 数据回放配置
+replayer:
+  # 回测开始时间
+  stime: 202201010930
+  # 回测结束时间
+  etime: 202312311500
+  # 基础数据文件
+  basefiles:
+    commodity: ./stk_comms.json
+    contract: ./stocks.json
+    session: ./stk_sessions.json
+    holiday: ./holidays.json
+  # 数据存储配置
+  mode: csv
+  store:
+    path: ./data/

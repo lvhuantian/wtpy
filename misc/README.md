@@ -1,53 +1,40 @@
-  ┌───────────────────────────────────────────┬─────────────────────────────┐                                                         
-  │                   File                    │         Description         │
-  ├───────────────────────────────────────────┼─────────────────────────────┤                                                         
-  │ misc/config/stock_pool.json               │ 股票池配置，包含10只示例A股 │                                                         
-  ├───────────────────────────────────────────┼─────────────────────────────┤                                                         
-  │ misc/config/strategy_params.yaml          │ 策略参数配置                │                                                         
-  ├───────────────────────────────────────────┼─────────────────────────────┤                                                         
-  │ misc/strategy/trend_indicator.py          │ 趋势指标计算模块            │                                                         
-  ├───────────────────────────────────────────┼─────────────────────────────┤                                                         
-  │ misc/strategy/position_manager.py         │ 仓位管理模块                │                                                         
-  ├───────────────────────────────────────────┼─────────────────────────────┤                                                         
-  │ misc/strategy/trend_selection_strategy.py │ 主策略类                    │                                                         
-  ├───────────────────────────────────────────┼─────────────────────────────┤                                                         
-  │ misc/strategy/__init__.py                 │ 模块初始化文件              │
-  ├───────────────────────────────────────────┼─────────────────────────────┤
-  │ misc/scripts/download_data.py             │ 数据下载脚本                │
-  ├───────────────────────────────────────────┼─────────────────────────────┤
-  │ misc/run_backtest.py                      │ 回测入口                    │
-  ├───────────────────────────────────────────┼─────────────────────────────┤
-  │ misc/configbt.yaml                        │ 回测配置文件                │
-  └───────────────────────────────────────────┴─────────────────────────────┘
+# 文件结构
+misc/
+├── config/
+│   ├── stock_pool.json               # 股票池配置，包含10只示例A股
+│   └── strategy_params.yaml          # 策略参数配置
+├── strategy/
+│   ├── trend_indicator.py            # 趋势指标计算模块
+│   ├── position_manager.py           # 仓位管理模块
+│   ├── trend_selection_strategy.py   # 主策略类
+│   └── __init__.py                   # 模块初始化文件
+├── scripts/
+│   └── download_data.py              # 数据下载脚本
+├── run_backtest.py                   # 回测入口
+└── configbt.yaml                     # 回测配置文件
 
-  策略架构
+# 策略架构
 
-  TrendSelectionStrategy (BaseSelStrategy)
-  ├── on_init() - 初始化，订阅行情
-  ├── on_session_begin() - 交易日开始，重置状态
-  ├── on_calculate() - 日线收盘后选股
-  ├── on_bar() - 分钟线进场/止损判断
-  └── on_session_end() - 交易日结束
+TrendSelectionStrategy (BaseSelStrategy)
+├── on_init() - 初始化，订阅行情
+├── on_session_begin() - 交易日开始，重置状态
+├── on_calculate() - 日线收盘后选股
+├── on_bar() - 分钟线进场/止损判断
+└── on_session_end() - 交易日结束
 
-  TrendIndicator (趋势指标)
-  ├── calc_ma() - 计算均线
-  ├── is_bullish_alignment() - 多头排列判断
-  ├── check_price_breakout() - 价格突破检测
-  └── check_trend_up() - 综合趋势判断
+TrendIndicator (趋势指标)
+├── calc_ma() - 计算均线
+├── is_bullish_alignment() - 多头排列判断
+├── check_price_breakout() - 价格突破检测
+└── check_trend_up() - 综合趋势判断
 
-  PositionManager (仓位管理)
-  ├── add/remove_position() - 持仓管理
-  ├── can_open_position() - 开仓检查
-  ├── get/set_candidates() - 候选股票管理
-  └── to_dict/from_dict() - 状态持久化
+PositionManager (仓位管理)
+├── add/remove_position() - 持仓管理
+├── can_open_position() - 开仓检查
+├── get/set_candidates() - 候选股票管理
+└── to_dict/from_dict() - 状态持久化
 
-
-
-1. 策略类型确认与设置
-你已选择使用 SEL 策略，这非常适合需要筛选大量标的并进行组合管理的场景。你将继承 [BaseSelStrategy](%2Fwondertrader%2Fwtpy%2Fwtpy%2FStrategyDefs.py#L267) 类。
-
-2. 判断趋势上涨的多种策略（选股逻辑）
-这部分逻辑将在 [BaseSelStrategy](%2Fwondertrader%2Fwtpy%2Fwtpy%2FStrategyDefs.py#L267) 的 on_calculate 方法中实现，针对每个标的进行日K线分析。
+# 策略实现
 
 数据准备： 在 on_init 方法中，你需要为所有潜在的标的订阅日K线数据。
 
